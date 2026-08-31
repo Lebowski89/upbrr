@@ -361,6 +361,7 @@ func TestSQLiteRepositoryCRUD(t *testing.T) {
 		Type:             stringPtr("REMUX"),
 		Source:           stringPtr("BluRay"),
 		Tag:              stringPtr("-GROUP"),
+		AltTitle:         stringPtr("AKA Native Title"),
 		ManualYear:       intPtr(2025),
 		UseSeasonEpisode: boolPtr(true),
 		NoAKA:            boolPtr(true),
@@ -380,6 +381,9 @@ func TestSQLiteRepositoryCRUD(t *testing.T) {
 	}
 	if gotOverrides.ManualYear == nil || *gotOverrides.ManualYear != 2025 {
 		t.Fatalf("unexpected manual year override: %#v", gotOverrides)
+	}
+	if gotOverrides.AltTitle == nil || *gotOverrides.AltTitle != "AKA Native Title" {
+		t.Fatalf("unexpected alt title override: %#v", gotOverrides)
 	}
 	if gotOverrides.NoAKA == nil || !*gotOverrides.NoAKA {
 		t.Fatalf("unexpected no aka override: %#v", gotOverrides)

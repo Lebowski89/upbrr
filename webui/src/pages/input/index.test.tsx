@@ -276,6 +276,47 @@ describe("InputPage", () => {
     });
   });
 
+  it("displays, edits, and clears the AKA alternate-title override", () => {
+    const base = readyInputFacet(1);
+    const facet: InputFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        preview: {
+          ...metadataPreview(1),
+          ReleaseNameOverrides: { AltTitle: "Stored Native Title" },
+        },
+      },
+    };
+    render(
+      <InputPage
+        facet={facet}
+        sourcePathHistory={[]}
+        handleBrowseFile={vi.fn()}
+        handleBrowseFolder={vi.fn()}
+        trackerUploadItems={[]}
+        showExternalIDInputUI={false}
+        setLightboxImage={vi.fn()}
+        setLightboxAlt={vi.fn()}
+        trackerIconSrcByName={{}}
+      />,
+    );
+
+    fireEvent.click(screen.getByText("Edit Release Details"));
+    const altTitle = screen.getByLabelText("AKA / Alternate title");
+    expect(altTitle).toHaveValue("Stored Native Title");
+    fireEvent.change(altTitle, { target: { value: "AKA Native Title" } });
+    expect(facet.changeReleaseName).toHaveBeenLastCalledWith({
+      AltTitle: "AKA Native Title",
+    });
+
+    fireEvent.change(altTitle, { target: { value: "" } });
+    expect(facet.changeReleaseName).toHaveBeenLastCalledWith({ AltTitle: "" });
+
+    fireEvent.click(screen.getByRole("button", { name: "Use automatic title" }));
+    expect(facet.changeReleaseName).toHaveBeenLastCalledWith({ ResetAltTitle: true });
+  });
+
   it("edits distributor and original-language metadata", () => {
     const facet = readyInputFacet(1);
     render(

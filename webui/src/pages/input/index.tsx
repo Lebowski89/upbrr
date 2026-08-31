@@ -832,6 +832,7 @@ export default function InputPage(props: Props) {
     resolution: "",
     tag: "",
     service: "",
+    altTitle: "",
     edition: "",
     season: "",
     episode: "",
@@ -858,6 +859,7 @@ export default function InputPage(props: Props) {
     resolution: false,
     tag: false,
     service: false,
+    altTitle: false,
     edition: false,
     season: false,
     episode: false,
@@ -941,6 +943,7 @@ export default function InputPage(props: Props) {
     assignString("resolution", "Resolution", edits.resolution);
     if (touched.tag) overrides.Tag = normalizedTag(edits.tag);
     assignString("service", "Service", edits.service);
+    assignString("altTitle", "AltTitle", edits.altTitle);
     assignString("edition", "Edition", edits.edition);
     assignString("season", "Season", edits.season);
     assignString("episode", "Episode", edits.episode);
@@ -994,6 +997,16 @@ export default function InputPage(props: Props) {
     const next = buildReleaseOverrides(releaseEditsRef.current, touched);
     if (!next.invalid) facet.changeReleaseName(next.overrides);
   };
+  const resetAltTitle = () => {
+    const edits = { ...releaseEditsRef.current, altTitle: "" };
+    const touched = { ...releaseTouchedRef.current, altTitle: false };
+    releaseEditsRef.current = edits;
+    releaseTouchedRef.current = touched;
+    setReleaseEditsState(edits);
+    setReleaseTouchedState(touched);
+    const next = buildReleaseOverrides(edits, touched);
+    if (!next.invalid) facet.changeReleaseName({ ...next.overrides, ResetAltTitle: true });
+  };
 
   useEffect(() => {
     const identity = externalIdentityDraftFromIdentity(preview.Identity);
@@ -1017,6 +1030,7 @@ export default function InputPage(props: Props) {
       resolution: stored.Resolution || "",
       tag: stored.Tag || "",
       service: stored.Service || "",
+      altTitle: stored.AltTitle || "",
       edition: stored.Edition || "",
       season: stored.Season || "",
       episode: stored.Episode || "",
@@ -1896,6 +1910,25 @@ export default function InputPage(props: Props) {
                         }}
                         placeholder="Netflix"
                       />
+                    </div>
+                    <div className="settings-field">
+                      <label htmlFor="release-alt-title">AKA / Alternate title</label>
+                      <input
+                        id="release-alt-title"
+                        value={releaseEdits?.altTitle || ""}
+                        onChange={(event) => {
+                          setReleaseEdits((prev) => ({ ...prev, altTitle: event.target.value }));
+                          markReleaseTouched("altTitle");
+                        }}
+                        placeholder="Native or original title"
+                      />
+                      <p className="muted path-helper">
+                        The AKA prefix is added automatically. Leave untouched to use provider
+                        metadata.
+                      </p>
+                      <button type="button" className="ghost" onClick={resetAltTitle}>
+                        Use automatic title
+                      </button>
                     </div>
                     <div className="settings-field">
                       <label htmlFor="release-distributor">Distributor</label>

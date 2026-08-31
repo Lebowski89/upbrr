@@ -35,6 +35,13 @@ func mergeReleaseNameOverrides(base api.ReleaseNameOverrides, incoming api.Relea
 	if incoming.Service != nil {
 		result.Service = incoming.Service
 	}
+	if incoming.AltTitle != nil {
+		result.AltTitle = incoming.AltTitle
+	}
+	if incoming.ResetAltTitle != nil && *incoming.ResetAltTitle {
+		result.AltTitle = nil
+	}
+	result.ResetAltTitle = nil
 	if incoming.Edition != nil {
 		result.Edition = incoming.Edition
 	}
@@ -99,6 +106,8 @@ func hasReleaseNameOverrides(overrides api.ReleaseNameOverrides) bool {
 		overrides.Resolution != nil ||
 		overrides.Tag != nil ||
 		overrides.Service != nil ||
+		overrides.AltTitle != nil ||
+		overrides.ResetAltTitle != nil ||
 		overrides.Edition != nil ||
 		overrides.Season != nil ||
 		overrides.Episode != nil ||
@@ -164,7 +173,7 @@ func manualSeasonEpisodeInstructionValues(overrides api.ReleaseNameOverrides) (i
 // instructions into canonical prepared state exactly once, after provider,
 // media, and scene evidence resolution and before the final release-name
 // rebuild, so the rebuilt name and every downstream fact projection consume
-// the same effective values. Naming-only controls (NoSeason, NoYear, NoAKA,
+// the same effective values. Naming-only controls (AltTitle, NoSeason, NoYear, NoAKA,
 // and the daily-date/season naming mode) stay in applyReleaseNameOverrides;
 // category stays on the typed instruction path into canonical identity.
 func applyReleaseNameValueOverrides(meta *preparationstate.State) {
@@ -279,6 +288,9 @@ func applyReleaseNameOverrides(req api.ReleaseNameRequest, overrides api.Release
 	if overrides.EpisodeTitle != nil {
 		req.EpisodeTitle = strings.TrimSpace(*overrides.EpisodeTitle)
 		req.ManualEpisodeTitle = true
+	}
+	if overrides.AltTitle != nil {
+		req.AltTitle = fillProviderAlternateTitle("", req.Title, *overrides.AltTitle)
 	}
 	if overrides.ManualDate != nil {
 		req.ManualDate = strings.TrimSpace(*overrides.ManualDate) != ""

@@ -986,6 +986,7 @@ export type ReleaseFactInstructions = Readonly<{
 }>;
 
 export type ReleaseNameOverrides = Readonly<{
+  AltTitle?: string | null;
   Category?: string | null;
   DualAudio?: boolean | null;
   Edition?: string | null;
@@ -1003,6 +1004,7 @@ export type ReleaseNameOverrides = Readonly<{
   NoTag?: boolean | null;
   NoYear?: boolean | null;
   Region?: string | null;
+  ResetAltTitle?: boolean | null;
   Resolution?: string | null;
   Season?: string | null;
   Service?: string | null;
@@ -1316,6 +1318,7 @@ export type ReleaseWorkflowUploadReconciliation = Readonly<{
 }>;
 
 export type ReleaseWorkflowUploadReleaseName = Readonly<{
+  altTitle?: string | null;
   category?: string | null;
   daily?: string | null;
   dualAudio?: boolean | null;
@@ -1333,6 +1336,7 @@ export type ReleaseWorkflowUploadReleaseName = Readonly<{
   noTag?: boolean | null;
   noYear?: boolean | null;
   region?: string | null;
+  resetAltTitle?: boolean | null;
   resolution?: string | null;
   season?: string | null;
   service?: string | null;

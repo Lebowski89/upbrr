@@ -3804,6 +3804,16 @@
       "ReleaseNameOverrides": {
         "type": "object",
         "properties": {
+          "AltTitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "Category": {
             "anyOf": [
               {
@@ -3968,6 +3978,16 @@
             "anyOf": [
               {
                 "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ResetAltTitle": {
+            "anyOf": [
+              {
+                "type": "boolean"
               },
               {
                 "type": "null"
@@ -5549,6 +5569,16 @@
       "ReleaseWorkflowUploadReleaseName": {
         "type": "object",
         "properties": {
+          "altTitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "category": {
             "anyOf": [
               {
@@ -5713,6 +5743,16 @@
             "anyOf": [
               {
                 "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "resetAltTitle": {
+            "anyOf": [
+              {
+                "type": "boolean"
               },
               {
                 "type": "null"

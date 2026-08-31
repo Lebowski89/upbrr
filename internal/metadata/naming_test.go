@@ -227,6 +227,67 @@ func TestApplyReleaseNameOverridesKeepsNamingOnlyControls(t *testing.T) {
 	}
 }
 
+func TestManualAltTitleOverrideUsesCanonicalAKANaming(t *testing.T) {
+	t.Parallel()
+
+	providerRequest := api.ReleaseNameRequest{
+		Category:    "TV",
+		Type:        "WEBDL",
+		Title:       "English Title",
+		AltTitle:    "AKA Provider Native Title",
+		Season:      "S01",
+		Resolution:  "1080p",
+		Source:      "Web",
+		Audio:       "AAC 2.0",
+		VideoEncode: "x264",
+		Tag:         "-GRP",
+	}
+
+	manual := applyReleaseNameOverrides(providerRequest, api.ReleaseNameOverrides{AltTitle: new("Manual Native Title")}, api.NopLogger{})
+	if manual.AltTitle != "AKA Manual Native Title" {
+		t.Fatalf("manual alternate = %q", manual.AltTitle)
+	}
+	if got := BuildReleaseName(manual, api.NopLogger{}).Name; got != "English Title AKA Manual Native Title S01 1080p WEB-DL AAC 2.0 x264-GRP" {
+		t.Fatalf("TV release name = %q", got)
+	}
+
+	prefixed := applyReleaseNameOverrides(providerRequest, api.ReleaseNameOverrides{AltTitle: new("AKA Manual Native Title")}, api.NopLogger{})
+	if prefixed.AltTitle != "AKA Manual Native Title" {
+		t.Fatalf("prefixed manual alternate = %q", prefixed.AltTitle)
+	}
+
+	withoutProvider := providerRequest
+	withoutProvider.AltTitle = ""
+	withoutProvider = applyReleaseNameOverrides(withoutProvider, api.ReleaseNameOverrides{AltTitle: new("Manual Native Title")}, api.NopLogger{})
+	if withoutProvider.AltTitle != "AKA Manual Native Title" {
+		t.Fatalf("manual alternate without provider = %q", withoutProvider.AltTitle)
+	}
+
+	cleared := applyReleaseNameOverrides(providerRequest, api.ReleaseNameOverrides{AltTitle: new("")}, api.NopLogger{})
+	if cleared.AltTitle != "" {
+		t.Fatalf("cleared manual alternate = %q", cleared.AltTitle)
+	}
+	resetOverrides := mergeReleaseNameOverrides(
+		api.ReleaseNameOverrides{AltTitle: new("Manual Native Title")},
+		api.ReleaseNameOverrides{ResetAltTitle: new(true)},
+	)
+	if resetOverrides.AltTitle != nil || resetOverrides.ResetAltTitle != nil {
+		t.Fatalf("reset overrides = %#v, want automatic title state", resetOverrides)
+	}
+	reset := applyReleaseNameOverrides(providerRequest, resetOverrides, api.NopLogger{})
+	if reset.AltTitle != providerRequest.AltTitle {
+		t.Fatalf("reset alternate = %q, want automatic %q", reset.AltTitle, providerRequest.AltTitle)
+	}
+
+	suppressed := applyReleaseNameOverrides(providerRequest, api.ReleaseNameOverrides{
+		AltTitle: new("Manual Native Title"),
+		NoAKA:    new(true),
+	}, api.NopLogger{})
+	if got := BuildReleaseName(suppressed, api.NopLogger{}).Name; strings.Contains(got, "Native Title") || strings.Contains(got, "AKA") {
+		t.Fatalf("NoAKA did not suppress manual alternate: %q", got)
+	}
+}
+
 func TestApplyReleaseNameValueOverridesUpdatesCanonicalFacts(t *testing.T) {
 	baseState := func() preparationstate.State {
 		return preparationstate.State{

@@ -160,6 +160,11 @@ var migrationRegistry = []migrationStep{
 		dependsOn: []string{baselineMigrationID},
 		apply:     migrateAddReleaseOmissionControls,
 	},
+	{
+		id:        "2026_08_add_release_override_alt_title",
+		dependsOn: []string{baselineMigrationID},
+		apply:     migrateAddReleaseOverrideAltTitle,
+	},
 }
 
 func migrateAddReleaseWorkflowStates(ctx context.Context, exec migrationExecutor) error {
@@ -637,6 +642,27 @@ func migrateAddReleaseOverrideUseSeasonEpisode(ctx context.Context, exec migrati
 	}
 	if _, err := exec.ExecContext(ctx, `ALTER TABLE release_overrides ADD COLUMN use_season_episode INTEGER`); err != nil {
 		return fmt.Errorf("db: %w", err)
+	}
+	return nil
+}
+
+func migrateAddReleaseOverrideAltTitle(ctx context.Context, exec migrationExecutor) error {
+	tablePresent, err := tableExists(ctx, exec, "release_overrides")
+	if err != nil {
+		return err
+	}
+	if !tablePresent {
+		return nil
+	}
+	exists, err := tableColumnExists(ctx, exec, "release_overrides", "alt_title")
+	if err != nil {
+		return err
+	}
+	if exists {
+		return nil
+	}
+	if _, err := exec.ExecContext(ctx, `ALTER TABLE release_overrides ADD COLUMN alt_title TEXT`); err != nil {
+		return fmt.Errorf("db: add release override alt title: %w", err)
 	}
 	return nil
 }
@@ -1519,6 +1545,7 @@ func createBaselineSchema(ctx context.Context, exec migrationExecutor) error {
 			release_resolution TEXT,
 			tag TEXT,
 			service TEXT,
+			alt_title TEXT,
 			edition TEXT,
 			season TEXT,
 			episode TEXT,

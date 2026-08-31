@@ -1039,7 +1039,7 @@ func TestBuildCLIRequestMetadataOverrides(t *testing.T) {
 }
 
 func TestBuildCLIRequestOmissionAliases(t *testing.T) {
-	opts, visited, paths, err := parseCLIOptions([]string{"-net", "-ndist", "-ne", "show.mkv"})
+	opts, visited, paths, err := parseCLIOptions([]string{"--alt-title", "Native Title", "-net", "-ndist", "-ne", "show.mkv"})
 	if err != nil {
 		t.Fatalf("parse: %v", err)
 	}
@@ -1047,10 +1047,27 @@ func TestBuildCLIRequestOmissionAliases(t *testing.T) {
 	if err != nil {
 		t.Fatalf("build request: %v", err)
 	}
+	if req.ReleaseNameOverrides.AltTitle == nil || *req.ReleaseNameOverrides.AltTitle != "Native Title" {
+		t.Fatalf("expected alt title override, got %#v", req.ReleaseNameOverrides.AltTitle)
+	}
 	if req.ReleaseNameOverrides.NoEpisodeTitle == nil || !*req.ReleaseNameOverrides.NoEpisodeTitle ||
 		req.ReleaseNameOverrides.NoDistributor == nil || !*req.ReleaseNameOverrides.NoDistributor ||
 		req.ReleaseNameOverrides.NoEdition == nil || !*req.ReleaseNameOverrides.NoEdition {
 		t.Fatalf("expected omission overrides, got %#v", req.ReleaseNameOverrides)
+	}
+}
+
+func TestBuildCLIRequestResetsAltTitle(t *testing.T) {
+	opts, visited, paths, err := parseCLIOptions([]string{"--reset-alt-title", "show.mkv"})
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	req, err := buildCLIRequest(opts, visited, paths, 4)
+	if err != nil {
+		t.Fatalf("build request: %v", err)
+	}
+	if req.ReleaseNameOverrides.ResetAltTitle == nil || !*req.ReleaseNameOverrides.ResetAltTitle {
+		t.Fatalf("expected alt title reset, got %#v", req.ReleaseNameOverrides.ResetAltTitle)
 	}
 }
 

@@ -135,6 +135,8 @@ type ReleaseNameOverrides struct {
 	Resolution       *string
 	Tag              *string
 	Service          *string
+	AltTitle         *string
+	ResetAltTitle    *bool
 	Edition          *string
 	Season           *string
 	Episode          *string

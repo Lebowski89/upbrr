@@ -90,6 +90,8 @@ func cloneReleaseNameOverrides(value ReleaseNameOverrides) ReleaseNameOverrides 
 		Resolution:       cloneString(value.Resolution),
 		Tag:              cloneString(value.Tag),
 		Service:          cloneString(value.Service),
+		AltTitle:         cloneString(value.AltTitle),
+		ResetAltTitle:    cloneBool(value.ResetAltTitle),
 		Edition:          cloneString(value.Edition),
 		Season:           cloneString(value.Season),
 		Episode:          cloneString(value.Episode),

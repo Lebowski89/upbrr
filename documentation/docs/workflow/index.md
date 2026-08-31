@@ -20,9 +20,11 @@ Metadata providers and local media inspection produce shared release facts. Revi
 - title and year;
 - movie, TV, anime, or other category;
 - release type, source, and resolution;
-- season, episode, edition, service, distributor, region, and group;
+- season, episode, alternate title/AKA, edition, service, distributor, region, and group;
 - external IDs;
 - generated release name.
+
+Use **AKA / Alternate title** when provider metadata does not supply the required native or original title; upbrr adds the `AKA` prefix automatically. **No AKA** still suppresses both automatic and manual alternate titles. Clear the field to store an explicit blank, or choose **Use automatic title** to restore provider-derived behavior.
 
 Overrides change the prepared generation. Later operations must use that exact generation rather than silently rebuilding it.
 

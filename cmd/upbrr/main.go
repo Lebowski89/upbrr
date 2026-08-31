@@ -972,6 +972,8 @@ type releaseOverrideInput struct {
 	Resolution     string
 	Tag            string
 	Service        string
+	AltTitle       string
+	ResetAltTitle  bool
 	Edition        string
 	Season         string
 	Episode        string
@@ -1010,6 +1012,12 @@ func buildReleaseNameOverrides(visited map[string]bool, input releaseOverrideInp
 	}
 	if visited["service"] {
 		overrides.Service = stringPtr(input.Service)
+	}
+	if visited["alt-title"] {
+		overrides.AltTitle = stringPtr(input.AltTitle)
+	}
+	if visited["reset-alt-title"] {
+		overrides.ResetAltTitle = boolPtr(input.ResetAltTitle)
 	}
 	if visited["edition"] {
 		overrides.Edition = stringPtr(input.Edition)
