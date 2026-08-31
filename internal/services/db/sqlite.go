@@ -909,7 +909,7 @@ func (r *SQLiteRepository) GetReleaseNameOverrides(ctx context.Context, path str
 
 	row := r.db.QueryRowContext(ctx, `
 		SELECT category, release_type, release_source, release_resolution,
-			tag, service, edition, season, episode, episode_title,
+			tag, service, alt_title, edition, season, episode, episode_title,
 			manual_year, manual_date, use_season_episode, no_season, no_year, no_aka, no_tag,
 			no_episode_title, no_distributor, no_edition, no_dub, no_dual, dual_audio, region
 		FROM release_overrides
@@ -923,6 +923,7 @@ func (r *SQLiteRepository) GetReleaseNameOverrides(ctx context.Context, path str
 	var releaseResolution sql.NullString
 	var tag sql.NullString
 	var service sql.NullString
+	var altTitle sql.NullString
 	var edition sql.NullString
 	var season sql.NullString
 	var episode sql.NullString
@@ -949,6 +950,7 @@ func (r *SQLiteRepository) GetReleaseNameOverrides(ctx context.Context, path str
 		&releaseResolution,
 		&tag,
 		&service,
+		&altTitle,
 		&edition,
 		&season,
 		&episode,
@@ -980,6 +982,7 @@ func (r *SQLiteRepository) GetReleaseNameOverrides(ctx context.Context, path str
 	overrides.Resolution = nullStringPtr(releaseResolution)
 	overrides.Tag = nullStringPtr(tag)
 	overrides.Service = nullStringPtr(service)
+	overrides.AltTitle = nullStringPtr(altTitle)
 	overrides.Edition = nullStringPtr(edition)
 	overrides.Season = nullStringPtr(season)
 	overrides.Episode = nullStringPtr(episode)
@@ -1021,6 +1024,7 @@ func (r *SQLiteRepository) SaveReleaseNameOverrides(ctx context.Context, path st
 			release_resolution,
 			tag,
 			service,
+			alt_title,
 			edition,
 			season,
 			episode,
@@ -1041,7 +1045,7 @@ func (r *SQLiteRepository) SaveReleaseNameOverrides(ctx context.Context, path st
 			region,
 			updated_at
 		)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(source_path) DO UPDATE SET
 			category = excluded.category,
 			release_type = excluded.release_type,
@@ -1049,6 +1053,7 @@ func (r *SQLiteRepository) SaveReleaseNameOverrides(ctx context.Context, path st
 			release_resolution = excluded.release_resolution,
 			tag = excluded.tag,
 			service = excluded.service,
+			alt_title = excluded.alt_title,
 			edition = excluded.edition,
 			season = excluded.season,
 			episode = excluded.episode,
@@ -1076,6 +1081,7 @@ func (r *SQLiteRepository) SaveReleaseNameOverrides(ctx context.Context, path st
 		nullString(overrides.Resolution),
 		nullString(overrides.Tag),
 		nullString(overrides.Service),
+		nullString(overrides.AltTitle),
 		nullString(overrides.Edition),
 		nullString(overrides.Season),
 		nullString(overrides.Episode),

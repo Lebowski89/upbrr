@@ -15,6 +15,8 @@ func TestMapPreparationRequestPreservesSingleSourceIntent(t *testing.T) {
 
 	tmdbID := 123456
 	category := "TV"
+	altTitle := "Native Title"
+	resetAltTitle := false
 	releaseType := "episode"
 	tag := "GRP"
 	distributor := "Example Distributor"
@@ -37,6 +39,8 @@ func TestMapPreparationRequestPreservesSingleSourceIntent(t *testing.T) {
 			Category:       &category,
 			Type:           &releaseType,
 			Tag:            &tag,
+			AltTitle:       &altTitle,
+			ResetAltTitle:  &resetAltTitle,
 			NoEpisodeTitle: &omitEpisodeTitle,
 			NoDistributor:  &omitDistributor,
 		},
@@ -73,6 +77,8 @@ func TestMapPreparationRequestPreservesSingleSourceIntent(t *testing.T) {
 				Category:       new("TV"),
 				Type:           new("episode"),
 				Tag:            new("GRP"),
+				AltTitle:       new("Native Title"),
+				ResetAltTitle:  new(false),
 				NoEpisodeTitle: new(true),
 				NoDistributor:  new(true),
 			},

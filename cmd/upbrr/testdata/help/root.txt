@@ -92,6 +92,10 @@ Release Overrides:
       Override group tag
   -service, --service, -serv string
       Override streaming service
+  -alt-title, --alt-title string
+      Override AKA / alternate title
+  -reset-alt-title, --reset-alt-title
+      Reset AKA / alternate title to provider metadata
   -distributor, --distributor, -dist string
       Override distributor
   -original-language, --original-language, -ol string

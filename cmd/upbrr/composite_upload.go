@@ -828,6 +828,8 @@ func compositeCLIFacts(instructions api.ReleaseFactInstructions) api.ReleaseWork
 			Resolution:       cloneCLIStringPointer(instructions.ReleaseName.Resolution),
 			Tag:              cloneCLIStringPointer(instructions.ReleaseName.Tag),
 			Service:          cloneCLIStringPointer(instructions.ReleaseName.Service),
+			AltTitle:         cloneCLIStringPointer(instructions.ReleaseName.AltTitle),
+			ResetAltTitle:    cloneCLIBoolPointer(instructions.ReleaseName.ResetAltTitle),
 			Edition:          cloneCLIStringPointer(instructions.ReleaseName.Edition),
 			Season:           cloneCLIStringPointer(instructions.ReleaseName.Season),
 			Episode:          cloneCLIStringPointer(instructions.ReleaseName.Episode),

@@ -287,6 +287,8 @@ export type ReleaseNameOverrides = {
   Resolution?: string | null;
   Tag?: string | null;
   Service?: string | null;
+  AltTitle?: string | null;
+  ResetAltTitle?: boolean | null;
   Edition?: string | null;
   Season?: string | null;
   Episode?: string | null;
@@ -1307,6 +1309,7 @@ export type ReleaseNameEditState = {
   resolution: string;
   tag: string;
   service: string;
+  altTitle: string;
   edition: string;
   season: string;
   episode: string;
@@ -1334,6 +1337,7 @@ export type ReleaseNameTouchedState = {
   resolution: boolean;
   tag: boolean;
   service: boolean;
+  altTitle: boolean;
   edition: boolean;
   season: boolean;
   episode: boolean;

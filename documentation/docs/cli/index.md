@@ -120,6 +120,8 @@ Process at most five entries from a queue folder:
 | `--resolution <value>`        | `-resolution`, `-res`                             | Override resolution.                              |
 | `--tag <value>`               | `-tag`, `-g`                                      | Override group tag.                               |
 | `--service <value>`           | `-service`, `-serv`                               | Override streaming service.                       |
+| `--alt-title <value>`         | `-alt-title`                                      | Override alternate title; adds `AKA`.             |
+| `--reset-alt-title`           | `-reset-alt-title`                                | Restore the provider-derived alternate title.     |
 | `--distributor <value>`       | `-distributor`, `-dist`                           | Override distributor.                             |
 | `--original-language <value>` | `-original-language`, `-ol`                       | Override original language.                       |
 | `--edition <value>`           | `-edition`, `-repack`                             | Override edition text.                            |

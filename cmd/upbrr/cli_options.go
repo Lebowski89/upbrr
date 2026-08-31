@@ -45,6 +45,8 @@ type cliOptions struct {
 	Resolution            string
 	Tag                   string
 	Service               string
+	AltTitle              string
+	ResetAltTitle         bool
 	Distributor           string
 	OriginalLanguage      string
 	Edition               string
@@ -177,6 +179,8 @@ func bindUploadFlags(fs *pflag.FlagSet, opts *cliOptions) {
 	fs.StringVar(&opts.Tag, "g", "", "Override group tag")
 	fs.StringVar(&opts.Service, "service", "", "Override streaming service")
 	fs.StringVar(&opts.Service, "serv", "", "Override streaming service")
+	fs.StringVar(&opts.AltTitle, "alt-title", "", "Override AKA / alternate title")
+	fs.BoolVar(&opts.ResetAltTitle, "reset-alt-title", false, "Reset AKA / alternate title to provider metadata")
 	fs.StringVar(&opts.Distributor, "distributor", "", "Override distributor")
 	fs.StringVar(&opts.Distributor, "dist", "", "Override distributor")
 	fs.StringVar(&opts.OriginalLanguage, "original-language", "", "Override original language")
@@ -831,6 +835,8 @@ func buildCLIRequest(opts cliOptions, visited map[string]bool, paths []string, s
 			Resolution:     opts.Resolution,
 			Tag:            opts.Tag,
 			Service:        opts.Service,
+			AltTitle:       opts.AltTitle,
+			ResetAltTitle:  opts.ResetAltTitle,
 			Edition:        opts.Edition,
 			Season:         opts.Season,
 			Episode:        opts.Episode,
